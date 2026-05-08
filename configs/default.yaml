@@ -1,0 +1,32 @@
+seed: 42
+device: auto
+
+data:
+  root: data/raw/flickr8k
+  image_dir: data/raw/flickr8k/Flickr8k_Dataset
+  captions_file: data/raw/flickr8k/Flickr8k_text/Flickr8k.token.txt
+  train_split: data/raw/flickr8k/Flickr8k_text/Flickr_8k.trainImages.txt
+  val_split: data/raw/flickr8k/Flickr8k_text/Flickr_8k.devImages.txt
+  test_split: data/raw/flickr8k/Flickr8k_text/Flickr_8k.testImages.txt
+  min_freq: 5
+  max_length: 21
+  num_workers: 2
+
+training:
+  batch_size: 64
+  epochs: 10
+  learning_rate: 0.001
+  weight_decay: 0.0
+  checkpoint_dir: models
+  log_every: 50
+
+model:
+  embed_size: 256
+  hidden_size: 512
+  attention_size: 256
+  dropout: 0.3
+  encoder_trainable: false
+
+inference:
+  max_length: 21
+  beam_size: 3
