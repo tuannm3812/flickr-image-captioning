@@ -15,6 +15,7 @@ The original notebook is preserved under `notebooks/archive/`. The refined Kaggl
 
 - `notebooks/flickr8k_baseline_kaggle.ipynb`
 - `notebooks/flickr8k_attention_kaggle.ipynb`
+- `notebooks/flickr8k_resnet_attention_kaggle.ipynb`
 
 They include inline code for training, saving checkpoints, generating BLEU scores, exporting prediction examples, and optionally publishing `/kaggle/working` outputs to a Kaggle Dataset through Kaggle Secrets.
 
@@ -28,3 +29,5 @@ The `src/` package remains the maintainable codebase version of the same workflo
 | Attention CNN-LSTM | 0.5718 | 0.3901 | 0.2625 | 0.1761 |
 
 The attention model improves all BLEU metrics, with the largest practical gain in phrase-level quality shown by BLEU-3 and BLEU-4.
+
+The next experiment notebook upgrades the visual encoder to ResNet50 and adds mixed precision, scheduling, and improved beam-search controls so it can be compared directly against the VGG16 attention benchmark.

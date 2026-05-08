@@ -49,9 +49,12 @@ Qualitatively, the attention model generates more specific captions, especially 
 |-- notebooks/
 |   |-- flickr8k_baseline_kaggle.ipynb
 |   |-- flickr8k_attention_kaggle.ipynb
+|   |-- flickr8k_resnet_attention_kaggle.ipynb
 |   `-- archive/
 |-- src/
 |   `-- flickr_captioning/
+|-- scripts/
+|   `-- build_improvement_notebook.py
 `-- tests/
 ```
 
@@ -80,6 +83,7 @@ Use these notebooks for training and artifact generation on Kaggle:
 
 - `notebooks/flickr8k_baseline_kaggle.ipynb`
 - `notebooks/flickr8k_attention_kaggle.ipynb`
+- `notebooks/flickr8k_resnet_attention_kaggle.ipynb`
 
 The notebooks keep the full training, prediction, checkpointing, and evaluation code inline so they can run on Kaggle without installing this repository.
 
@@ -90,6 +94,23 @@ Each notebook writes outputs to `/kaggle/working`:
 - `sample_predictions.csv`
 - `training_history.csv`
 - `inference_examples.png`
+
+### Next Experiment Notebook
+
+`notebooks/flickr8k_resnet_attention_kaggle.ipynb` is the next-improvement run. It keeps the attention decoder but upgrades the visual encoder to ResNet50 and adds:
+
+- mixed precision training on CUDA,
+- `ReduceLROnPlateau` scheduling,
+- beam-search length normalization,
+- a repetition penalty,
+- `run_metadata.json` export.
+
+Use it to compare against the current VGG16 attention benchmark:
+
+| Model | BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 |
+|---|---:|---:|---:|---:|
+| VGG16 Attention | 0.5718 | 0.3901 | 0.2625 | 0.1761 |
+| ResNet50 Attention | TBD | TBD | TBD | TBD |
 
 ### Push Kaggle Outputs to GitHub
 
