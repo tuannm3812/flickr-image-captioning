@@ -53,10 +53,12 @@ RUN_EVALUATION = True
 RUN_SAMPLE_INFERENCE = True
 
 MODEL_KIND = "resnet_attention"
-EPOCHS = 8
+EPOCHS = 25
 BATCH_SIZE = 64
 LEARNING_RATE = 4e-4
 WEIGHT_DECAY = 1e-5
+EARLY_STOPPING_PATIENCE = 4
+EARLY_STOPPING_MIN_DELTA = 1e-3
 MIN_FREQ = 5
 MAX_LEN = 24
 BEAM_SIZE = 5
@@ -590,31 +592,46 @@ def train_model():
     checkpoint_path = WORK_DIR / "best_resnet_attention.pt"
     history = []
     best_val = float("inf")
+    epochs_without_improvement = 0
 
     for epoch in range(1, EPOCHS + 1):
         start = time.time()
         train_loss = run_epoch(encoder, decoder, train_loader, criterion, optimizer, scaler)
         val_loss = run_epoch(encoder, decoder, val_loader, criterion)
         scheduler.step(val_loss)
+        improved = val_loss < (best_val - EARLY_STOPPING_MIN_DELTA)
+        if improved:
+            best_val = val_loss
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
+
         row = {
             "epoch": epoch,
             "train_loss": train_loss,
             "val_loss": val_loss,
+            "best_val_loss": best_val,
+            "improved": improved,
+            "epochs_without_improvement": epochs_without_improvement,
             "lr": optimizer.param_groups[0]["lr"],
             "seconds": time.time() - start,
         }
         history.append(row)
         print(
             f"Epoch {epoch:02d} | train {train_loss:.4f} | val {val_loss:.4f} | "
+            f"best {best_val:.4f} | wait {epochs_without_improvement}/{EARLY_STOPPING_PATIENCE} | "
             f"lr {row['lr']:.2e} | {row['seconds']:.1f}s"
         )
-        if val_loss < best_val:
-            best_val = val_loss
+        if improved:
             save_checkpoint(checkpoint_path, history, best_val)
             print(f"Saved checkpoint: {checkpoint_path}")
+        if epochs_without_improvement >= EARLY_STOPPING_PATIENCE:
+            print(f"Early stopping at epoch {epoch}: validation loss did not improve by {EARLY_STOPPING_MIN_DELTA} for {EARLY_STOPPING_PATIENCE} epochs.")
+            break
 
-    pd.DataFrame(history).to_csv(WORK_DIR / "training_history.csv", index=False)
-    return checkpoint_path, pd.DataFrame(history)
+    history_df = pd.DataFrame(history)
+    history_df.to_csv(WORK_DIR / "training_history.csv", index=False)
+    return checkpoint_path, history_df
 
 
 if RUN_TRAINING:
@@ -799,6 +816,8 @@ run_metadata = {
     "batch_size": BATCH_SIZE,
     "learning_rate": LEARNING_RATE,
     "weight_decay": WEIGHT_DECAY,
+    "early_stopping_patience": EARLY_STOPPING_PATIENCE,
+    "early_stopping_min_delta": EARLY_STOPPING_MIN_DELTA,
     "max_len": MAX_LEN,
     "beam_size": BEAM_SIZE,
     "length_alpha": LENGTH_ALPHA,

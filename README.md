@@ -87,6 +87,14 @@ Use these notebooks for training and artifact generation on Kaggle:
 
 The notebooks keep the full training, prediction, checkpointing, and evaluation code inline so they can run on Kaggle without installing this repository.
 
+Training defaults are intentionally set higher now, with early stopping enabled:
+
+| Notebook | Max Epochs | Early Stopping |
+|---|---:|---|
+| Baseline CNN-LSTM | 20 | patience 3, min delta 0.001 |
+| VGG16 Attention | 20 | patience 3, min delta 0.001 |
+| ResNet50 Attention | 25 | patience 4, min delta 0.001 |
+
 Each notebook writes outputs to `/kaggle/working`:
 
 - `best_baseline.pt` or `best_attention.pt`

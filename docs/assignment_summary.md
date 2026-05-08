@@ -31,3 +31,5 @@ The `src/` package remains the maintainable codebase version of the same workflo
 The attention model improves all BLEU metrics, with the largest practical gain in phrase-level quality shown by BLEU-3 and BLEU-4.
 
 The next experiment notebook upgrades the visual encoder to ResNet50 and adds mixed precision, scheduling, and improved beam-search controls so it can be compared directly against the VGG16 attention benchmark.
+
+The Kaggle notebooks now use longer maximum training runs with validation-loss early stopping. Baseline and VGG16 attention run up to 20 epochs with patience 3; ResNet50 attention runs up to 25 epochs with patience 4.
