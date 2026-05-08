@@ -1,11 +1,24 @@
 # Flickr8k Image Captioning
 
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![PyTorch](https://img.shields.io/badge/PyTorch-CNN--LSTM-ee4c2c)
+![Dataset](https://img.shields.io/badge/dataset-Flickr8k-2ea44f)
+![Kaggle](https://img.shields.io/badge/runtime-Kaggle-20beff)
+![Git LFS](https://img.shields.io/badge/checkpoints-Git%20LFS-f64935)
+![Best BLEU-4](https://img.shields.io/badge/best%20BLEU--4-0.1761-brightgreen)
+
 A PyTorch image-captioning project converted from an assignment notebook into a reproducible training, evaluation, and inference workflow.
 
 The project compares two CNN-LSTM captioning systems on Flickr8k:
 
 - **Baseline CNN-LSTM:** frozen VGG16 encoder plus LSTM decoder.
 - **Attention CNN-LSTM:** VGG16 spatial features plus additive attention and beam-search decoding.
+
+## Sample Captions
+
+The image below shows qualitative predictions from the attention model. These samples are exported directly from the Kaggle inference workflow.
+
+![Attention model image-captioning examples](artifacts/attention/inference_examples.png)
 
 ## Results
 
