@@ -16,8 +16,11 @@ A professional PyTorch project for image captioning on Flickr8k. The original as
 .
 ├── configs/default.yaml
 ├── docs/assignment_summary.md
+├── artifacts/
+│   └── baseline/
 ├── notebooks/
-│   ├── flickr8k_image_captioning_project.ipynb
+│   ├── flickr8k_baseline_kaggle.ipynb
+│   ├── flickr8k_attention_kaggle.ipynb
 │   └── archive/
 ├── src/flickr_captioning/
 │   ├── cli.py
@@ -53,9 +56,18 @@ You can override these paths in `configs/default.yaml`.
 
 The original assignment notebook is preserved in `notebooks/archive/`.
 
-Use `notebooks/flickr8k_image_captioning_project.ipynb` for the Kaggle-ready professional workflow. It keeps the core training, evaluation, checkpointing, and inference code inline so the notebook can run on Kaggle without installing this repository as a package.
+Use the Kaggle-ready notebooks for training and artifact generation:
+
+- `notebooks/flickr8k_baseline_kaggle.ipynb`
+- `notebooks/flickr8k_attention_kaggle.ipynb`
+
+Both notebooks keep the core training, evaluation, checkpointing, and inference code inline so they can run on Kaggle without installing this repository as a package. They also include an optional publishing cell that can version `/kaggle/working` outputs to a Kaggle Dataset using Kaggle Secrets.
 
 The reusable implementation under `src/` remains the cleaner project version for local development, testing, and future refactoring.
+
+## Saved Artifacts
+
+The baseline Kaggle run is saved under `artifacts/baseline/`. The checkpoint is tracked with Git LFS because it is close to GitHub's regular file-size limit.
 
 ## Setup
 

@@ -13,8 +13,11 @@ models/
 outputs/
 runs/
 wandb/
+!artifacts/
+!artifacts/**
 
 *.pt
+!artifacts/**/*.pt
 *.pth
 *.ckpt
 *.pkl

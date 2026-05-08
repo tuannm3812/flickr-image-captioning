@@ -11,6 +11,11 @@ This repository converts that assignment outline into a reusable project:
 - Attention, beam search, and greedy decoding became `models.py` and `inference.py`.
 - Training, validation, checkpointing, and BLEU evaluation became `train.py` and `evaluation.py`.
 
-The original notebook is preserved under `notebooks/archive/`. The refined project notebook is `notebooks/flickr8k_image_captioning_project.ipynb`; it acts as a professional Kaggle experiment notebook with inline code for training, saving checkpoints, generating BLEU scores, and exporting prediction examples.
+The original notebook is preserved under `notebooks/archive/`. The refined Kaggle workflows are split by architecture:
+
+- `notebooks/flickr8k_baseline_kaggle.ipynb`
+- `notebooks/flickr8k_attention_kaggle.ipynb`
+
+They include inline code for training, saving checkpoints, generating BLEU scores, exporting prediction examples, and optionally publishing `/kaggle/working` outputs to a Kaggle Dataset through Kaggle Secrets.
 
 The `src/` package remains the maintainable codebase version of the same workflow.
