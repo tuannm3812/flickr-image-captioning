@@ -65,6 +65,29 @@ Both notebooks keep the core training, evaluation, checkpointing, and inference 
 
 The reusable implementation under `src/` remains the cleaner project version for local development, testing, and future refactoring.
 
+### Push Kaggle Outputs to GitHub
+
+To save notebook outputs directly from Kaggle back to this repository:
+
+1. Create a GitHub fine-grained personal access token for this repo with **Contents: Read and write** access.
+2. In Kaggle, open the notebook and go to **Add-ons > Secrets**.
+3. Add a secret named `GITHUB_TOKEN` with the token value.
+4. In the notebook configuration cell, set:
+
+   ```python
+   PUBLISH_TO_GITHUB = True
+   GITHUB_TARGET_BRANCH = "kaggle-baseline-artifacts"  # or "main"
+   ```
+
+5. Run training/evaluation.
+6. Run the final GitHub publishing cell:
+
+   ```python
+   publish_artifacts_to_github()
+   ```
+
+By default, the notebooks push to a separate artifact branch to avoid unexpected changes on `main`. Set `GITHUB_TARGET_BRANCH = "main"` only when you intentionally want Kaggle to commit directly to the main branch.
+
 ## Saved Artifacts
 
 The baseline Kaggle run is saved under `artifacts/baseline/`. The checkpoint is tracked with Git LFS because it is close to GitHub's regular file-size limit.
