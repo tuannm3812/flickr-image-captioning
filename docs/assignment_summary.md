@@ -19,3 +19,12 @@ The original notebook is preserved under `notebooks/archive/`. The refined Kaggl
 They include inline code for training, saving checkpoints, generating BLEU scores, exporting prediction examples, and optionally publishing `/kaggle/working` outputs to a Kaggle Dataset through Kaggle Secrets.
 
 The `src/` package remains the maintainable codebase version of the same workflow.
+
+## Current Results
+
+| Model | BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 |
+|---|---:|---:|---:|---:|
+| Baseline CNN-LSTM | 0.4929 | 0.3009 | 0.1680 | 0.1060 |
+| Attention CNN-LSTM | 0.5718 | 0.3901 | 0.2625 | 0.1761 |
+
+The attention model improves all BLEU metrics, with the largest practical gain in phrase-level quality shown by BLEU-3 and BLEU-4.

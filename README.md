@@ -90,7 +90,14 @@ By default, the notebooks push to a separate artifact branch to avoid unexpected
 
 ## Saved Artifacts
 
-The baseline Kaggle run is saved under `artifacts/baseline/`. The checkpoint is tracked with Git LFS because it is close to GitHub's regular file-size limit.
+Kaggle run outputs are saved under `artifacts/`.
+
+| Model | BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 | Artifact Path |
+|---|---:|---:|---:|---:|---|
+| Baseline CNN-LSTM | 0.4929 | 0.3009 | 0.1680 | 0.1060 | `artifacts/baseline/` |
+| Attention CNN-LSTM | 0.5718 | 0.3901 | 0.2625 | 0.1761 | `artifacts/attention/` |
+
+Checkpoints are tracked with Git LFS because they are close to GitHub's regular file-size limit.
 
 ## Setup
 
