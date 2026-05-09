@@ -27,8 +27,9 @@ The `src/` package remains the maintainable codebase version of the same workflo
 |---|---:|---:|---:|---:|
 | Baseline CNN-LSTM | 0.4929 | 0.3009 | 0.1680 | 0.1060 |
 | Attention CNN-LSTM | 0.5718 | 0.3901 | 0.2625 | 0.1761 |
+| ResNet50 Attention | 0.6103 | 0.4318 | 0.2885 | 0.1955 |
 
-The attention model improves all BLEU metrics, with the largest practical gain in phrase-level quality shown by BLEU-3 and BLEU-4.
+The attention model improves all BLEU metrics over the baseline, with the largest practical gain in phrase-level quality shown by BLEU-3 and BLEU-4. The ResNet50 attention run improves further, reaching the strongest BLEU-4 score so far.
 
 The next experiment notebook upgrades the visual encoder to ResNet50 and adds mixed precision, scheduling, and improved beam-search controls so it can be compared directly against the VGG16 attention benchmark.
 

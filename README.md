@@ -5,7 +5,7 @@
 ![Dataset](https://img.shields.io/badge/dataset-Flickr8k-2ea44f)
 ![Kaggle](https://img.shields.io/badge/runtime-Kaggle-20beff)
 ![Git LFS](https://img.shields.io/badge/checkpoints-Git%20LFS-f64935)
-![Best BLEU-4](https://img.shields.io/badge/best%20BLEU--4-0.1761-brightgreen)
+![Best BLEU-4](https://img.shields.io/badge/best%20BLEU--4-0.1955-brightgreen)
 
 A PyTorch image-captioning project converted from an assignment notebook into a reproducible training, evaluation, and inference workflow.
 
@@ -13,27 +13,29 @@ The project compares two CNN-LSTM captioning systems on Flickr8k:
 
 - **Baseline CNN-LSTM:** frozen VGG16 encoder plus LSTM decoder.
 - **Attention CNN-LSTM:** VGG16 spatial features plus additive attention and beam-search decoding.
+- **ResNet50 Attention:** stronger spatial encoder plus attention, mixed precision, scheduling, and improved beam search.
 
 ## Sample Captions
 
-The image below shows qualitative predictions from the attention model. These samples are exported directly from the Kaggle inference workflow.
+The image below shows qualitative predictions from the strongest current model, ResNet50 attention. These samples are exported directly from the Kaggle inference workflow.
 
-![Attention model image-captioning examples](artifacts/attention/inference_examples.png)
+![ResNet50 attention image-captioning examples](artifacts/resnet_attention/inference_examples.png)
 
 ## Results
 
-Kaggle runs are saved under `artifacts/`. The attention model improves every BLEU metric, with the strongest gains on BLEU-3 and BLEU-4, which suggests better phrase-level fluency rather than only better single-word matching.
+Kaggle runs are saved under `artifacts/`. Attention improves every BLEU metric over the baseline, and the ResNet50 attention model is the strongest run so far.
 
 | Model | BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 | Validation Loss | Artifacts |
 |---|---:|---:|---:|---:|---:|---|
 | Baseline CNN-LSTM | 0.4929 | 0.3009 | 0.1680 | 0.1060 | 2.8575 | `artifacts/baseline/` |
 | Attention CNN-LSTM | 0.5718 | 0.3901 | 0.2625 | 0.1761 | 2.7660 | `artifacts/attention/` |
+| ResNet50 Attention | 0.6103 | 0.4318 | 0.2885 | 0.1955 | 2.7556 | `artifacts/resnet_attention/` |
 
 ### Evaluation Insights
 
-The attention model is the better system in this experiment. BLEU-1 increased from **0.4929** to **0.5718**, showing better object and keyword coverage. BLEU-4 increased from **0.1060** to **0.1761**, which is the more important improvement because it captures longer phrase overlap and more coherent caption structure.
+The ResNet50 attention model is the best system in this experiment. Compared with the VGG16 attention model, BLEU-1 increased from **0.5718** to **0.6103**, and BLEU-4 increased from **0.1761** to **0.1955**. That is about an **11% relative BLEU-4 gain**, which points to better phrase-level caption quality rather than only better object keywords.
 
-Qualitatively, the attention model generates more specific captions, especially for people and action scenes. It still makes semantic mistakes, such as hallucinating scene context or misidentifying subjects, but its captions are generally less generic than the baseline. The remaining errors suggest that more training, a stronger visual backbone, and better decoding constraints would be useful next steps.
+Qualitatively, ResNet50 attention improves several subject/action captions, but it still makes plausible semantic mistakes. For example, it can correctly identify a dog or people sitting together while hallucinating the surrounding context. The remaining errors suggest that the next meaningful step is not only a stronger CNN backbone, but also better decoding constraints, larger-scale pretraining, or a transformer-based captioning model.
 
 ## Repository Layout
 
@@ -41,7 +43,8 @@ Qualitatively, the attention model generates more specific captions, especially 
 .
 |-- artifacts/
 |   |-- baseline/
-|   `-- attention/
+|   |-- attention/
+|   `-- resnet_attention/
 |-- configs/
 |   `-- default.yaml
 |-- docs/
@@ -118,7 +121,7 @@ Use it to compare against the current VGG16 attention benchmark:
 | Model | BLEU-1 | BLEU-2 | BLEU-3 | BLEU-4 |
 |---|---:|---:|---:|---:|
 | VGG16 Attention | 0.5718 | 0.3901 | 0.2625 | 0.1761 |
-| ResNet50 Attention | TBD | TBD | TBD | TBD |
+| ResNet50 Attention | 0.6103 | 0.4318 | 0.2885 | 0.1955 |
 
 ### Push Kaggle Outputs to GitHub
 
@@ -163,13 +166,15 @@ flickr-caption train --config configs/default.yaml --model baseline
 flickr-caption train --config configs/default.yaml --model attention
 
 # Predict
-flickr-caption predict --checkpoint artifacts/baseline/best_baseline.pt --image path\to\image.jpg
-flickr-caption predict --checkpoint artifacts/attention/best_attention.pt --image path\to\image.jpg --beam-size 3
+flickr-caption predict --checkpoint models/best_baseline.pt --image path\to\image.jpg
+flickr-caption predict --checkpoint models/best_attention.pt --image path\to\image.jpg --beam-size 3
 
 # Evaluate
-flickr-caption evaluate --checkpoint artifacts/baseline/best_baseline.pt
-flickr-caption evaluate --checkpoint artifacts/attention/best_attention.pt --beam-size 3
+flickr-caption evaluate --checkpoint models/best_baseline.pt
+flickr-caption evaluate --checkpoint models/best_attention.pt --beam-size 3
 ```
+
+The saved `artifacts/` checkpoints come from the self-contained Kaggle notebooks and are primarily preserved as run outputs. Use the notebooks for reproducing those exact artifact workflows.
 
 ## Next Improvements
 
